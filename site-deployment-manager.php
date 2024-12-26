@@ -1,11 +1,10 @@
 <?php
 /**
  * Plugin Name: Site Deployment Manager
- * Plugin URI: https://yourwebsite.com/site-deployment-manager
  * Description: Adds a deployment button that triggers a webhook and logs deployments
  * Version: 1.0.0
- * Author: Your Name
- * Author URI: https://yourwebsite.com
+ * Author: Kibet Ishmael
+ * Author URI: https://github.com/kmishmael
  * License: GPL v2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain: site-deployment-manager
@@ -27,10 +26,21 @@ define('SITE_DEPLOY_PLUGIN_URL', plugin_dir_url(__FILE__));
 // Include the main plugin class
 require_once SITE_DEPLOY_PLUGIN_DIR . 'includes/class-deploy-manager.php';
 
-// Initialize the plugin
-function run_site_deployment_manager() {
-    $plugin = Site_Deploy_Manager::get_instance(); // Use singleton
-    register_activation_hook(__FILE__, array($plugin, 'deploy_manager_install'));
-    $plugin->init();
+/**
+* Handles activation hook.
+*/
+function deploy_manager_install_hook() {
+   $plugin = Site_Deploy_Manager::get_instance();
+   $plugin->deploy_manager_install();
 }
+
+/**
+ * Initialize the plugin.
+ */
+function run_site_deployment_manager() {
+    Site_Deploy_Manager::get_instance();
+}
+
+register_activation_hook(__FILE__, 'deploy_manager_install_hook');
+
 run_site_deployment_manager();

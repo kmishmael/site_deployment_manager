@@ -1,11 +1,15 @@
-<div class="wrap">
-    <h1>Site Deployment Manager</h1>
+<div class="wrap deploy-manager">
+    <h1 style="margin-bottom: 12px;">Site Deployment Manager</h1>
 
-    <div class="deploy-actions">
-        <button id="trigger-deploy" class="button button-primary">
-            Trigger Deployment
-        </button>
-        <div id="deploy-status"></div>
+    <div class="deploy-section">
+        <div class="deploy-card">
+            <h2>Deploy Your Site</h2>
+            <p>Click the button below to trigger a new deployment of your static site.</p>
+            <button id="trigger-deploy" class="deploy-button">
+                <span class="button-text">Deploy Site</span>
+                <div class="loader"></div>
+            </button>
+        </div>
     </div>
 
     <div class="deploy-logs">

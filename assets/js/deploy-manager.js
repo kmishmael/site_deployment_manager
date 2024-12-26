@@ -1,10 +1,20 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     const deployButton = document.getElementById('trigger-deploy');
-    
     if (!deployButton) return;
 
-    deployButton.addEventListener('click', async function() {
-        // Disable button and show loader
+    let isDeploying = false; // Ensures only one deployment at a time
+
+
+    deployButton.addEventListener('click', async function (e) {
+
+        e.preventDefault();
+        e.stopPropagation();
+
+        if (isDeploying) {
+            return;
+        }
+
+        isDeploying = true;
         deployButton.classList.add('loading');
         deployButton.disabled = true;
 
@@ -15,7 +25,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
             const response = await fetch(deployManagerData.ajaxurl, {
                 method: 'POST',
-                body: formData
+                body: formData,
+                cache: 'no-cache',
+                headers: {
+                    'Cache-Control': 'no-cache',
+                }
             });
 
             const data = await response.json();
@@ -33,6 +47,7 @@ document.addEventListener('DOMContentLoaded', function() {
             showNotification('error', 'Error connecting to the server');
         } finally {
             // Re-enable button and hide loader
+            isDeploying = false;
             deployButton.classList.remove('loading');
             deployButton.disabled = false;
         }
