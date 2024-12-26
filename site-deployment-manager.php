@@ -29,7 +29,8 @@ require_once SITE_DEPLOY_PLUGIN_DIR . 'includes/class-deploy-manager.php';
 
 // Initialize the plugin
 function run_site_deployment_manager() {
-    $plugin = new Site_Deploy_Manager();
+    $plugin = Site_Deploy_Manager::get_instance(); // Use singleton
+    register_activation_hook(__FILE__, array($plugin, 'deploy_manager_install'));
     $plugin->init();
 }
 run_site_deployment_manager();

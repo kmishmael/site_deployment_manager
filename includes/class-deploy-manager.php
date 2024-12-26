@@ -97,18 +97,26 @@ class Site_Deploy_Manager {
         global $wpdb;
         $table_name = $wpdb->prefix . 'deployment_logs';
         
-        $charset_collate = $wpdb->get_charset_collate();
-        
-        $sql = "CREATE TABLE IF NOT EXISTS $table_name (
-            id mediumint(9) NOT NULL AUTO_INCREMENT,
-            deploy_time datetime DEFAULT CURRENT_TIMESTAMP,
-            status varchar(20) NOT NULL,
-            response_message text,
-            PRIMARY KEY  (id)
-        ) $charset_collate;";
-        
-        require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
-        dbDelta($sql);
+        // Check if table exists first
+        if($wpdb->get_var("SHOW TABLES LIKE '$table_name'") != $table_name) {
+            $charset_collate = $wpdb->get_charset_collate();
+            
+            $sql = "CREATE TABLE $table_name (
+                id mediumint(9) NOT NULL AUTO_INCREMENT,
+                deploy_time datetime DEFAULT CURRENT_TIMESTAMP,
+                status varchar(20) NOT NULL,
+                response_message text,
+                PRIMARY KEY  (id)
+            ) $charset_collate;";
+            
+            require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+            dbDelta($sql);
+            
+            // Verify table was created
+            if($wpdb->get_var("SHOW TABLES LIKE '$table_name'") != $table_name) {
+                error_log('Failed to create deployment logs table');
+            }
+        }
     }
 
     /**

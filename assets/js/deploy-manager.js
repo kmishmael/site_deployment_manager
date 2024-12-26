@@ -61,7 +61,9 @@ function showNotification(type, message) {
             notification.remove();
         }, 300);
     }, 3000);
-}document.addEventListener('DOMContentLoaded', function() {
+}
+
+document.addEventListener('DOMContentLoaded', function() {
     const deployButton = document.getElementById('trigger-deploy');
     
     if (!deployButton) return;
